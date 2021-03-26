@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'org.spongepowered.plugin' version '0.9.0'
+    id 'net.kyori.blossom' version '1.2.0'
+}
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
+
+blossom {
+    replaceToken '${plugin.id}', pluginId
+    replaceToken '${plugin.name}', pluginName
+    replaceToken '${plugin.version}', version
+    replaceToken '${plugin.description}', properties.get('description', '')
+    replaceToken '${plugin.url}', properties.get('url', '')
+    replaceToken '${plugin.authors}', properties.get('authors', '')
+}
+
+def authorList = properties.get('authors', '').tokenize(', ')
+sponge {
+    plugin {
+        id = pluginId
+        meta {
+            inherit project
+            name = pluginName
+            authors = authorList
+            dependencies {
+                /*othermodid {
+                    version = '6.9'
+                    optional = true
+                }*/
+            }
+        }
+    }
+}
+
+repositories {
+
+}
+
+dependencies {
+    compileOnly "org.spongepowered:spongeapi:$spongeapiVersion"
+    annotationProcessor "org.spongepowered:spongeapi:$spongeapiVersion"
+    //compileOnly "org.spongepowered:spongecommon:$spongecommonVersion:dev"
+    //compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+}
