@@ -1,11 +1,27 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
+    }
+}
+
 plugins {
     id 'java'
     id 'org.spongepowered.plugin' version '0.9.0'
     id 'net.kyori.blossom' version '1.2.0'
 }
+apply plugin: 'net.minecraftforge.gradle'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 compileJava.options.encoding = 'UTF-8'
+
+minecraft {
+    mappings channel: mcpChannel, version: mcpVersion
+}
 
 blossom {
     replaceToken '${plugin.id}', pluginId
@@ -39,8 +55,11 @@ repositories {
 }
 
 dependencies {
+    minecraft "net.minecraftforge:forge:$forgeVersion"
     compileOnly "org.spongepowered:spongeapi:$spongeapiVersion"
     annotationProcessor "org.spongepowered:spongeapi:$spongeapiVersion"
     //compileOnly "org.spongepowered:spongecommon:$spongecommonVersion:dev"
     //compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+jar.finalizedBy('reobfJar')
